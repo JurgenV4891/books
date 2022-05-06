@@ -1,20 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text } from "react-native";
+import * as Font from "expo-font";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import BookScreen from "./screens/BookScreen";
+
+const App = () => {
+  const [loading, setLoading] = useState(true);
+  const loadFont = async () => {
+    try {
+      await Font.loadAsync({
+        "Gilroy-Bold": require("./assets/fonts/Gilroy-Bold.ttf"),
+        "GT-Sectra-Fine-Regular": require("./assets/fonts/GT-Sectra-Fine-Regular.ttf"),
+        "Montserrat-Black": require("./assets/fonts/Montserrat-Black.ttf"),
+        "Montserrat-Medium": require("./assets/fonts/Montserrat-Medium.ttf"),
+        "Montserrat-SemiBold": require("./assets/fonts/Montserrat-SemiBold.ttf"),
+      });
+      setLoading(false);
+    } catch (e) {
+      console.log("erreur", e);
+    }
+  };
+  useEffect(() => {
+    loadFont();
+    console.log("platform=", Platform.OS);
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+  return <BookScreen />;
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 30,
   },
 });
+
+export default App;
